@@ -1,10 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <personnes>
     <etudiant>
         <classe>M2-info</classe>
         <nom>jponcy</nom>
-    <etudiant>
+        <email>poncy.jonathan@gmail.com</email>
+    </etudiant>
     <etudiant>
         <classe>M2-info</classe>
         <nom>Tavernero</nom>
-    <etudiant>
-<personnes>
+    </etudiant>
+</personnes>
