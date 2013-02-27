@@ -2,7 +2,7 @@ package org.i2l.exdbinj;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +10,6 @@ import java.util.Vector;
 
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.Text;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
@@ -93,14 +92,6 @@ public class XMLConverter {
 		}
 	}
 
-	public static void main(String[] args) {
-		XMLConverter xmlConverter = new XMLConverter(
-				new File(
-						"/home/jponcy/Documents/cours/base_de_donnees_reparti/injecteur_extracteur_ExDbInj/tests_files/test.xml"));
-		xmlConverter.readXML();
-		System.out.println(xmlConverter);
-	}
-
 	public String toString() {
 		String toReturn = "Print data";
 		for(Table t:data) {
@@ -109,25 +100,74 @@ public class XMLConverter {
 		return toReturn;
 	}
 
-	// TODO Look about params of the next functions
-	private void generateRequestOfCreationOfTable() {
-		// TODO Auto-generated method stub
+	/**
+	 * Generate the queries to create the db
+	 * @return
+	 */
+	private Map<String, String> generateRequestOfCreationOfTable() {
+		Map<String, String> toReturn = new HashMap<String, String>();
+		String request;
+		for(Table table:data) {
+			// we test if we know already this table
+			if(!toReturn.containsKey(table.getName())) {
+				request = String.format("CREATE TABLE %s IF NOT EXIST(", table.getName());
+				Map<String, String> values = table.getValues();
+				for( Iterator<String> ii = values.keySet().iterator(); ii.hasNext();) {
+					String columnName = (String)ii.next();
+					request += columnName + " VARCHAR(150)";
+					if(ii.hasNext())
+						request+=",";
+				}
+				request += ")";
+				toReturn.put(table.getName(), request);
+			}
+		}
+		return toReturn;
 	}
 
-	private void generateRequestOfAddToOneTable() {
-		// TODO Auto-generated method stub
+	private Vector<String> generateRequestOfAddToOneTable() {
+		Vector<String> toReturn = new Vector<String>();
+		final String genericRequest = "INSERT INTO %s (%s)VALUES (%s)";
+		String tables;
+		String values;
+		for(Table table:data) {
+			// init vars
+			tables = "";
+			values = "";
+			// get the goods attributes
+			Map<String, String> valuesMap = table.getValues();
+			for( Iterator<String> ii = valuesMap.keySet().iterator(); ii.hasNext();) {
+				String key = (String)ii.next();;
+				tables += key;
+				values += "\"" + (String) valuesMap.get(key) + "\"";
+				if(ii.hasNext()) {
+					tables += ",";
+					values += ",";
+				}
+			}
+			// add the query
+			toReturn.add(String.format(genericRequest, table.getName(), tables, values));
+		}
+		return toReturn;
 	}
 
 	private Vector<String> generateScriptOfCreationAndFillDatabase() {
 		Map<String, String> scriptsOfCreation = null; // 1: nom bdd, 2: script
 		Vector<String> scriptsOfFill = null;
-		// TODO Auto-generated method stub
-		// for all tables
-		generateRequestOfCreationOfTable();
-		// for all line (of value)
-		generateRequestOfAddToOneTable();
+		scriptsOfCreation = generateRequestOfCreationOfTable();
+		scriptsOfFill = generateRequestOfAddToOneTable();
 
-		return null;
+		if(scriptsOfFill == null)
+			scriptsOfFill = new Vector<String>();
+
+		// add the creations script before inserts
+		if (scriptsOfCreation != null ) { 
+			for( Iterator<String> ii = scriptsOfCreation.keySet().iterator(); ii.hasNext();) {
+				String value = (String) scriptsOfCreation.get(ii.next());
+				scriptsOfFill.add(0, value);
+			}
+		}
+		return scriptsOfFill;
 	}
 
 	public Vector<String> getScripts() {
@@ -135,6 +175,8 @@ public class XMLConverter {
 	}
 
 	public static Vector<String> convertXmlToScript(File file) {
-		return new XMLConverter(file).getScripts();
+		XMLConverter xmlConverter = new XMLConverter(file);
+		xmlConverter.readXML();
+		return xmlConverter.getScripts();
 	}
 }
