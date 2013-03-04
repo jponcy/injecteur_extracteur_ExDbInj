@@ -28,7 +28,7 @@ public class ExtractorView extends JFrame {
 
 	public ExtractorView() {
 		buildUI();
-		setSize(800, 600);
+		setSize(500, 250);
 		setVisible(true);
 	}
 
