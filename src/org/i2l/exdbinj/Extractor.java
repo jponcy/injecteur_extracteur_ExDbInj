@@ -7,7 +7,7 @@ import java.sql.Statement;
 public abstract class Extractor {
 	protected String url = null, dbName = null, userName = null,
 			password = null;
-	protected Connection connect = null;
+	public Connection connect = null;
 	protected Statement statement = null;
 	protected ResultSet resultSet = null;
 
