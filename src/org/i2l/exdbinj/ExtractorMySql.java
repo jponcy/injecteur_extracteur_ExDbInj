@@ -1,26 +1,10 @@
 package org.i2l.exdbinj;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
-public class ExtractorMySql {
-
-	private String url = null;
-	private String dbName = null;
-	private String userName = null;
-	private String password = null;
-	private Connection connect = null;
-	private Statement statement = null;
-	private ResultSet resultSet = null;
-
+public class ExtractorMySql extends Extractor{
 	public ExtractorMySql(String e_url, String e_db, String e_user, String e_passwd){
-		url = "jdbc:mysql://"+ e_url +"/";
-		dbName = e_db;
-		userName = e_user;
-		password = e_passwd;
-		System.out.println("init mysql");
+		super("jdbc:mysql://", e_url, e_db, e_user, e_passwd);
 	}
 	
 	public String getResult(String request){
@@ -102,35 +86,4 @@ public class ExtractorMySql {
 
 	}
 	*/
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	private void close() {
-		try {
-			if (resultSet != null) { resultSet.close(); }
-			if (statement != null) { statement.close(); }
-			if (connect != null) { connect.close(); }
-		}
-		catch (Exception e) { }
-	}
 }
