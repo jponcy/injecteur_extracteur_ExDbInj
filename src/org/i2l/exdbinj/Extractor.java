@@ -4,10 +4,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import org.jdom.Document;
+
 public abstract class Extractor {
-	protected String url = null, dbName = null, userName = null,
-			password = null;
-	public Connection connect = null;
+	protected String url = null, dbName = null, userName = null, password = null;
+	protected Connection connect = null;
 	protected Statement statement = null;
 	protected ResultSet resultSet = null;
 
@@ -32,7 +33,7 @@ public abstract class Extractor {
 	 * @param request: the request send to the DB
 	 * @return String the results
 	 */
-	public abstract String getResult(String request);
+	public abstract Document getResult(String request);
 	
 	/**
 	 * Close the connection to the DB
