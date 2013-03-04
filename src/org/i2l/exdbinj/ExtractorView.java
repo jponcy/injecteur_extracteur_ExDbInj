@@ -1,8 +1,13 @@
 package org.i2l.exdbinj;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
@@ -18,7 +23,8 @@ public class ExtractorView extends JFrame {
 	private JTextField dbName;
 	private JTextField user;
 	private JTextField password;
-	private JTextArea request;
+	private JTextArea 	request;
+	private JButton		bSend;
 
 	public ExtractorView() {
 		buildUI();
@@ -34,7 +40,7 @@ public class ExtractorView extends JFrame {
 	 
 	    //type of sgbd
 	    Box typeSgbdBox = Box.createHorizontalBox();
-	    typeSgbdBox.add(new JLabel("Type dy SGBD: "));
+	    typeSgbdBox.add(new JLabel("Type of SGBD: "));
 	    typeSGBD = new JTextField(SIZE_TF); // TODO mettre une combo
 	    typeSGBD.setSize(new Dimension(WIDTH, 1));
 	    typeSgbdBox.add(typeSGBD);
@@ -68,12 +74,18 @@ public class ExtractorView extends JFrame {
 	    passwordBox.add(new JLabel("Password: "));
 	    password = new JTextField(SIZE_TF);
 	    passwordBox.add(password);
-	    // requête
+	    // request
 	    Box requestBox = Box.createHorizontalBox();
 	    requestBox.add(new JLabel("Request: "));
 	    request = new JTextArea(3, SIZE_TF);
 	    requestBox.add(request);
+	    //bouton
+	    Box buttonsBox = Box.createHorizontalBox();
+	    bSend = new JButton("Send");
+	    buttonsBox.add(bSend);
 
+	    buildActionsListeners();
+	    
 	    //ajouts
 	    Box fields = Box.createVerticalBox();
 	    fields.add(typeSgbdBox);
@@ -84,19 +96,33 @@ public class ExtractorView extends JFrame {
 	    fields.add(userBox);
 	    fields.add(passwordBox);
 	    fields.add(requestBox);
-/*
-    -> type SGBD (oracle, postgresql, mysql, orbc, ...)
+	    fields.add(buttonsBox);
 
-    -> URL (sous la forme: jdbc:<type_sgbd>:\\<host>:<num_port>\<db_name> - à générer automatiquement en fonction des champs ci-dessous)
-        -> HOST:
-        -> PORT:
-        -> DB name:
-        -> USER:
-        -> PASSWORD:
-
-    -> Requête	 
- */
 	    this.getContentPane().add(fields);
 	    this.setVisible(true);
+	}
+
+	private void buildActionsListeners() {
+		request.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER)
+					send();
+			}
+		});
+		bSend.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				send();
+			}
+		});
+
+	}
+	
+	/**
+	 * The method launch by user after typing datas
+	 */
+	private void send() {
+		// TODO Auto-generated method stub
+		System.out.println("Launch the treatment !");
 	}
 }
