@@ -154,19 +154,19 @@ public class XMLConverter {
 	private Vector<String> generateScriptOfCreationAndFillDatabase() {
 		Map<String, String> scriptsOfCreation = null; // 1: nom bdd, 2: script
 		Vector<String> scriptsOfFill = null;
-		scriptsOfCreation = generateRequestOfCreationOfTable();
+//		scriptsOfCreation = generateRequestOfCreationOfTable();
 		scriptsOfFill = generateRequestOfAddToOneTable();
 
 		if(scriptsOfFill == null)
 			scriptsOfFill = new Vector<String>();
 
 		// add the creations script before inserts
-		if (scriptsOfCreation != null ) { 
-			for( Iterator<String> ii = scriptsOfCreation.keySet().iterator(); ii.hasNext();) {
-				String value = (String) scriptsOfCreation.get(ii.next());
-				scriptsOfFill.add(0, value);
-			}
-		}
+//		if (scriptsOfCreation != null ) { 
+//			for( Iterator<String> ii = scriptsOfCreation.keySet().iterator(); ii.hasNext();) {
+//				String value = (String) scriptsOfCreation.get(ii.next());
+//				scriptsOfFill.add(0, value);
+//			}
+//		}
 		return scriptsOfFill;
 	}
 
