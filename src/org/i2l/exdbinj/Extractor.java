@@ -63,13 +63,11 @@ public abstract class Extractor {
 			document = new Document(racine);
 
 			while (resultSet.next()) {
-				Element elm = new Element(resultSet.getMetaData().getTableName(
-						1));
+				Element elm = new Element(resultSet.getMetaData().getTableName(1));
 				racine.addContent(elm);
 
-				for (int i = 1; i < resultSet.getMetaData().getColumnCount(); i++) {
-					Element tmp = new Element(resultSet.getMetaData()
-							.getColumnName(i));
+				for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+					Element tmp = new Element(resultSet.getMetaData().getColumnName(i));
 					tmp.setText(resultSet.getString(i));
 					elm.addContent(tmp);
 				}
