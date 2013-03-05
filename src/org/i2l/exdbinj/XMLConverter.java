@@ -104,7 +104,8 @@ public class XMLConverter {
 	 * Generate the queries to create the db
 	 * @return
 	 */
-	private Map<String, String> generateRequestOfCreationOfTable() {
+	@SuppressWarnings("unused")
+    private Map<String, String> generateRequestOfCreationOfTable() {
 		Map<String, String> toReturn = new HashMap<String, String>();
 		String request;
 		for(Table table:data) {
@@ -152,7 +153,7 @@ public class XMLConverter {
 	}
 
 	private Vector<String> generateScriptOfCreationAndFillDatabase() {
-		Map<String, String> scriptsOfCreation = null; // 1: nom bdd, 2: script
+//		Map<String, String> scriptsOfCreation = null; // 1: nom bdd, 2: script
 		Vector<String> scriptsOfFill = null;
 //		scriptsOfCreation = generateRequestOfCreationOfTable();
 		scriptsOfFill = generateRequestOfAddToOneTable();
